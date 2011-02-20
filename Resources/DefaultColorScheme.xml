@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ColorScheme>
+	<ColorItems>
+	  <!-- For colorRGB Use binary values -->
+    <!-- darkblue -->
+    <ColorItem itemType="sharp" colorRGB="060620" startRange="0" endRange="1"></ColorItem>
+    <!-- darkblue -->
+    <ColorItem itemType="sharp" colorRGB="060630" startRange="2" endRange="3"></ColorItem>
+    <!-- navy -->
+		<ColorItem itemType="sharp" colorRGB="060640" startRange="4" endRange="6"></ColorItem>
+    <!-- midnightblue -->
+    <ColorItem itemType="sharp" colorRGB="191970" startRange="7" endRange="8"></ColorItem>
+    <!-- RED -->
+    <ColorItem itemType="sharp" colorRGB="ff0000" startRange="9" endRange="16"></ColorItem>
+    <!-- YELLOW -->
+    <ColorItem itemType="sharp" colorRGB="ffff00" startRange="17" endRange="38"></ColorItem>
+    <!-- WHITE -->
+    <ColorItem itemType="sharp" colorRGB="ffffff" startRange="39" endRange="499"></ColorItem>
+    <!-- BLACK -->
+    <ColorItem itemType="mdbs" colorRGB="000000"></ColorItem>
+	</ColorItems>
+</ColorScheme>
