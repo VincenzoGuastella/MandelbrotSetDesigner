@@ -33,6 +33,6 @@ Colors can be configured through the dedicated dialog in the GUI
 
 Known issues:
 
-- repaint of the main thread not working properly
+- repaint of the main window not working properly
 - the color configuration dialog opens twice
 
