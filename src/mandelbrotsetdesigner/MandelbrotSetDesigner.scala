@@ -4,11 +4,12 @@ import mandelbrotsetdesigner.util.Config
 import mandelbrotsetdesigner.datamodel._
 import mandelbrotsetdesigner.guicomponents.GuiMenu
 import mandelbrotsetdesigner.guicomponents.GuiFramework
+import mandelbrotsetdesigner.guicomponents.ColorDialog
+import mandelbrotsetdesigner.guicomponents.RepaintAllEvent
 
 import swing._
 import java.awt.image.BufferedImage
 import java.awt.{Toolkit, Color, Graphics}
-
 import scala.xml._
 import scala.collection.immutable.StringOps
 import scala.collection.mutable.LinkedList
@@ -16,8 +17,6 @@ import scala.collection.mutable.LinkedList
 
 
 object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework with Config with GuiMenu {
-
-	var parentWindow: Window = null
 	
 	override def startup(args: Array[String]) {
 		var configFilName = parseInputArgs(args)
@@ -30,28 +29,29 @@ object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework wi
 	def top = new MainFrame {
 
 		title = "A Mandelbrot Set"
-		MandelbrotSetDesigner.parentWindow = owner
+		mainFrame = this
     preferredSize_=(new Dimension(WIDTH, HEIGHT + 25)) 
  
     menuBar = addGuiMenu(contents)
 
     contents = new Panel {
-			ignoreRepaint=true
       var img = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB)
       this.peer.setDoubleBuffered(true)
  
       override def paintComponent(g : Graphics2D) : Unit = {
        	super.paintComponent(g)
        	
-       	tryCatch(this) { drawPixels(img) }                
+       	if (repaintAll)
+       		tryCatch(this) { calculatePixels(img) } 
+       	
        	g.drawImage(img, null, 0, 0)        
 //        Toolkit.getDefaultToolkit().sync
 //        g.dispose 
       }
     }
 	}
-
-	def drawPixels(img: BufferedImage) {
+	
+	def calculatePixels(img: BufferedImage) {
    	var timeCheck = System.currentTimeMillis()
    	log("Calling drawImage", INFO)
 		
@@ -63,6 +63,8 @@ object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework wi
 
     timeCheck = System.currentTimeMillis() - timeCheck
    	log("drawImage completed. Time taken: " + timeCheck, INFO)
+   	
+   	repaintAll = false
 	}
 		
 	/**

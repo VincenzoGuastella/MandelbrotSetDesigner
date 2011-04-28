@@ -1,10 +1,14 @@
 package mandelbrotsetdesigner.guicomponents
 
 import swing._
+import scala.swing.event.Event
+import scala.swing.event.WindowClosing
+import scala.swing.event.WindowClosed
 
-import mandelbrotsetdesigner.MandelbrotSetDesigner
-
-trait GuiMenu extends GuiFramework {
+trait GuiMenu extends GuiFramework with Reactor {
+	
+	var mainFrame : Frame = null
+	var repaintAll = true
 	
 	def addGuiMenu(contents: Seq[scala.swing.Component]): MenuBar = {
 		
@@ -28,12 +32,29 @@ trait GuiMenu extends GuiFramework {
 	def setColors() {
 		
 		log("setColors method start", FINE)
-		val parent = MandelbrotSetDesigner.parentWindow
-		val dialog = new ColorDialog(parent)
+		val colorDialog = new ColorDialog(mainFrame.owner)
 
-		dialog.open()
 		log("setColors method end", FINE)
-
+	  listenTo(colorDialog)
+		
+		reactions += {
+		  case RepaintAllEvent(colorDialog) => {
+		  	log("Reactions: caught RepaintAllEvent", FINE)
+		  	repaintAll = true 
+		    deafTo(colorDialog)
+		  	colorDialog close;
+		  	mainFrame repaint 
+		  } 
+		  // Is it necessary ?
+		  case WindowClosing(colorDialog) => {
+		  	log("Reactions: caught WindowClosing event", INFO)
+		    deafTo(colorDialog)
+		  }
+//		  case e : Event => {
+//		  	log("Case else selected", VERBOSE)
+//		  	log(" " + e, INFO)
+//		  }		  
+		}
 	}
 
 }

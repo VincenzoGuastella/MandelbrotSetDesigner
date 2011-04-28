@@ -3,14 +3,13 @@ package mandelbrotsetdesigner.guicomponents
 import mandelbrotsetdesigner.ColorsList
 import mandelbrotsetdesigner.util.Config
 import mandelbrotsetdesigner.datamodel.ColorItem
-
+import mandelbrotsetdesigner.MandelbrotSetDesigner
 
 import scala.swing._
 import scala.swing.Panel
 import scala.swing.Frame
 import scala.swing.Button
 import scala.swing.Dialog
-
 import _root_.java.awt.Color._
 import java.text.NumberFormat
 import java.awt.BorderLayout
@@ -19,7 +18,6 @@ import javax.swing.JSpinner
 import javax.swing.Icon
 import javax.swing.ImageIcon
 import javax.swing.JColorChooser
-
 import scala.swing.event.MouseClicked
 import scala.collection.mutable.Buffer
 import scala.collection.mutable.ListBuffer
@@ -28,7 +26,10 @@ import scala.collection.mutable.ListBuffer
 class ColorDialog(owner: Window) extends Dialog(owner) with GuiFramework with Config {
 
 	log ("ColorDialog started", VERBOSE)	
-	modal = true	
+	
+//  Published events are not received when the listener is owner and the dialog is modal
+//	modal = true	
+
 	var isValid = true
 	var repaintParent = false
 	var colorDialog = this
@@ -152,11 +153,7 @@ class ColorDialog(owner: Window) extends Dialog(owner) with GuiFramework with Co
 		getSortedItems.foreach(item => colors += item.asInstanceOf[ColorPanel].toColorItem)
 		setConfigColors(colors)
 		log(" " + colors.toList, VERBOSE)
-		close()
+		publish(new RepaintAllEvent(this))
 	}
 	
-	override def closeOperation() {
-		if (repaintParent) owner repaint
-	}
-
 }
