@@ -50,32 +50,34 @@ class ColorDialog(owner: Window) extends Dialog(owner) with GuiFramework with Co
     }
   }
 	
-  var dialogHeight = 24
 	log ("Created Dialog Menu Bar", VERBOSE)
   var mdbsColorPanel : MdbsColorPanel	= null
    
 	contents = new BoxPanel(Orientation.Vertical) {
 		colors.colors.foreach(colorItem => {
-			dialogHeight += 46			
-			if (colorItem.startRange < MAX_ITERATIONS)
-		  	contents += new BaseColorPanel(colorDialog, colorItem.startRange, 
-		  														     colorItem.endRange, colorItem.getColorValue)
-			else {
+//			dialogHeight += 46			
+			if (colorItem.startRange >= MAX_ITERATIONS) {
 		  	mdbsColorPanel = new MdbsColorPanel(colorDialog, colorItem.getColorValue)
 		  	contents += mdbsColorPanel				
-			}
+			} else if (colorItem.isInstanceOf[mandelbrotsetdesigner.datamodel.SharpColorItem]) 
+			  	contents += new BaseColorPanel(colorDialog, colorItem.startRange, 
+			  														     colorItem.endRange, colorItem.getColorValue,
+			  														     colorItem.getColorValue, true)
+		  else if (colorItem.isInstanceOf[mandelbrotsetdesigner.datamodel.SmoothedColorItem]) 
+		  	contents += new BaseColorPanel(colorDialog, colorItem.startRange, 
+		  														     colorItem.endRange, colorItem.getColorValue, 
+		  																 colorItem.getGradientValue, false)		  	
+
 		})
   }
 
-	preferredSize_=(new Dimension(600, dialogHeight)) 
 	//Keep these at the bottom
 	//As soon as visible is true it starts repainting
 	log ("About to set visible", VERBOSE)
+	pack
 	visible = true
 	
 	override def repaint : Unit = {
-		log ("ColorDialog: repaint called. Window Height <" + dialogHeight + ">", VERBOSE)
-		preferredSize_=(new Dimension(600, dialogHeight)) 
    	super.repaint()
   }
 	
@@ -85,8 +87,7 @@ class ColorDialog(owner: Window) extends Dialog(owner) with GuiFramework with Co
 		var newDialogPanel: BoxPanel = contents.head.asInstanceOf[BoxPanel] 
 		newDialogPanel.contents -= item.asInstanceOf[BoxPanel]
 		contents = newDialogPanel
-		dialogHeight -= 46
-
+		pack
 		repaint
 	}
 	
@@ -139,10 +140,10 @@ class ColorDialog(owner: Window) extends Dialog(owner) with GuiFramework with Co
 	
 	def addColor {
 		contents = new BoxPanel(Orientation.Vertical) {
-	  	contents += new BaseColorPanel(colorDialog, 0, 0, java.awt.Color.WHITE.getRGB)
+	  	contents += new BaseColorPanel(colorDialog, 0, 0, java.awt.Color.WHITE.getRGB, 0, false)
 	  	contents ++= getSortedItems
   	}
-		dialogHeight += 46			
+		pack
 		repaint
 	}
 

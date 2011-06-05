@@ -23,10 +23,10 @@ class FunctionIterator(p_y0: Int, p_y1: Int,
 		  		val x = START_X + (INCREMENT * p_x)
 			  	val y = START_Y + (INCREMENT * p_y)
 			  	
-				  val it: Int = getIterations(0, 0, x, y, 0)
+				  val (it: Int, newX: Double, newY: Double) = getIterations(0, 0, x, y, 0)
 		      log("getIterations completed:" + it, FINEST)  
 				  
-					val rgb = colors.findColor(it, 0, 0)		  	
+					val rgb = colors.findColor(it, newX, newY, x, y)		  	
 					log("Color selected:" + rgb, FINEST)  
 					
 				  imageDrawer ! (new PixelColor(p_x, p_y, rgb))
@@ -53,12 +53,23 @@ class FunctionIterator(p_y0: Int, p_y1: Int,
   }
 
   def getIterations(x:Double, 	y:Double, 
-										x_0:Double, y_0:Double, iterations: Int):Int = {
+										x_0:Double, y_0:Double, iterations: Int):(Int, Double, Double) = {
 	  val newX = x*x - y*y + x_0
 	  val newY = 2*x*y + y_0
 	  if (iterations < MAX_ITERATIONS && newX*newX + newY*newY <= 4)
 			getIterations(newX, newY, x_0, y_0, iterations+1)
-		else iterations
+		else (iterations, newX, newY)
+	}
+}
+
+object FunctionIterator {
+  
+  def getZEscape (x:Double, 	y:Double, 
+									x_0:Double, y_0:Double, counter: Int):(Double) = {
+	  val newX = x*x - y*y + x_0
+	  val newY = 2*x*y + y_0
+	  if (counter > 1) getZEscape(newX, newY, x_0, y_0, counter + 1)
+		else Math.sqrt(newX*newX + newY*newY)
 	}
 
 }

@@ -55,6 +55,7 @@ trait Config extends MyLoggable {
 	def START_Y: Double = Config.START_Y
 	def INCREMENT: Double = Config.INCREMENT
 
+	def ESCAPE_RADIUS: Double = Config.ESCAPE_RADIUS
 }
 
 object Config {
@@ -72,4 +73,7 @@ object Config {
 	var START_X: Double = 0 
 	var START_Y: Double = 0
 	var INCREMENT: Double = 0
+	
+	val ESCAPE_RADIUS: Double = 2.0
+
 }

@@ -6,11 +6,9 @@ import mandelbrotsetdesigner.datamodel.ColorItem
 import mandelbrotsetdesigner.datamodel.MdbsColorItem
 import mandelbrotsetdesigner.datamodel.SharpColorItem
 import mandelbrotsetdesigner.EmptySpace
-
 import scala.swing._
 import scala.swing.event.ButtonClicked
 import scala.swing.event.MouseClicked
-
 import _root_.java.awt.Color._
 import java.text.NumberFormat
 import java.awt.BorderLayout
@@ -20,6 +18,7 @@ import javax.swing.Icon
 import javax.swing.ImageIcon
 import javax.swing.JColorChooser
 import javax.swing.border.EmptyBorder
+import mandelbrotsetdesigner.datamodel.SmoothedColorItem
 
 
 
@@ -56,15 +55,15 @@ trait ColorTypeRadioBtn {
   }
 }
 
-class BaseColorPanel(parent: ColorDialog, from: Int, to: Int, color: Int) 
+class BaseColorPanel(parent: ColorDialog, from: Int, to: Int, 
+										 color: Int, gradient: Int, var isSharp: Boolean) 
 	extends BoxPanel(Orientation.Horizontal) with ColorPanel with ColorTypeRadioBtn {
 
-	var isSharp = true
 	border = Swing.EmptyBorder(4, 3, 4, 5)
 
 	val spinPanel = new SpinnerPanel(from, to)
 	val picker  = new ColorPicker(parent, color)
-	val picker2 = new ColorPicker(parent, color)
+	val picker2 = new ColorPicker(parent, gradient)
 
 	contents += spinPanel
 
@@ -72,34 +71,47 @@ class BaseColorPanel(parent: ColorDialog, from: Int, to: Int, color: Int)
 	contents += lColorType
 	contents += radiosPan
 	import Dialog._
-  colorType.selected.get match {
-	  case `smth` => setSmoothed
-	  case _ => setSharp
-  }	
+	if (isSharp){
+		colorType.select(shrp)     
+		setSharp
+	} else {
+		colorType.select(smth)     
+		setSmoothed
+	}
 
 	contents += lColor
 	contents += picker
 	contents += new EmptySpace()
 	contents += lGrad
 	contents += picker2
-	listenTo(picker.mouse.clicks)
 
 	contents += new EmptySpace()
 	contents += removeBtn
+	listenTo(picker.mouse.clicks, picker2.mouse.clicks)
 	listenTo(removeBtn)
-           
+	listenTo(shrp, smth) //Radio buttons
+
 	reactions += {
 		//ColorPicker Actions
 		case MouseClicked(`picker`, point, mod, clicks, pops) => {
       picker.update
     }
+		case MouseClicked(`picker2`, point, mod, clicks, pops) => {
+      if (picker2.enabled) picker2.update
+    }
 		//removeBtn Actions
 		case ButtonClicked(`removeBtn`) => {
 			parent removeColor this
     }
+		//colorType Actions
+		case ButtonClicked(`shrp`) => {
+			setSharp
+    }
+		case ButtonClicked(`smth`) => {
+			setSmoothed
+    }
 	}
- 
-		
+ 	
 	def setSharp {
 		isSharp = true
 		picker2.disable //Wanted to write: disable picker2 (how to declare method?)
@@ -121,8 +133,8 @@ class BaseColorPanel(parent: ColorDialog, from: Int, to: Int, color: Int)
 	def getTo(): Int = spinPanel getTo
 
 	def toColorItem: ColorItem = {
-//		if (isSharp) new SharpColorItem(getFrom, getTo, picker getColorValue)
-		new SharpColorItem(picker getColorValue, getFrom, getTo)
+		if (isSharp) new SharpColorItem(picker getColorValue, getFrom, getTo)
+		else new SmoothedColorItem(picker color, picker2 color, getFrom, getTo)
 	}
 
 }

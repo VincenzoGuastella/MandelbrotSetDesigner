@@ -1,19 +1,16 @@
 package mandelbrotsetdesigner
 
-import mandelbrotsetdesigner.datamodel.ColorItem
-import mandelbrotsetdesigner.datamodel.SharpColorItem
-import mandelbrotsetdesigner.datamodel.SmoothedColorItem
-import mandelbrotsetdesigner.datamodel.MdbsColorItem
+import mandelbrotsetdesigner.datamodel._
+
 import mandelbrotsetdesigner.util.Config
 import mandelbrotsetdesigner.util.MyLoggable
-
 import scala.xml._
 import scala.collection.mutable.ListBuffer
-
 import java.awt.Color
+import scala.collection.mutable.LinkedList
 
 
-object ColorsList extends MyLoggable{
+object ColorsList extends MyLoggable {
 
 	//Default values
 	def getInstance():ColorsList = {
@@ -76,14 +73,51 @@ object ColorsList extends MyLoggable{
 
 		true
 	}
+
+	/**
+	 * getSmoothedColorArray(from: Color, to: Color)
+	 * Returns a list of colors varying the RGB  
+	 * values between the two input colors  
+	 */
+	def getSmoothedColorArray(from: Color, to: Color): List[Color] = {
+		
+		var colorsPalette: ListBuffer[Color] = new ListBuffer() //Initialize the color list and add starting color
+		colorsPalette += from
+		
+		val channels = List(new ChannelValues(from.getRed, to.getRed, 0, 0),
+												new ChannelValues(from.getGreen, to.getGreen, 0, 0),
+												new ChannelValues(from.getBlue, to.getBlue, 0, 0))
+	  
+		log("Initialized color palette.", VERBOSE)
+		log(" " + colorsPalette.toList, VERBOSE)
+		
+		log("Channels: " + channels.toList, VERBOSE)
+
+		for (i <- 1 until 254) {
+			println("i: " + i)
+	  	if (channels.exists{_.nextStep == i}) {
+	  		colorsPalette += new Color(channels(0).getNewChanneValue(i), 
+	  															 channels(1).getNewChanneValue(i),
+	  															 channels(2).getNewChanneValue(i))
+	  	}
+	  }
+		
+		colorsPalette += to 
+		
+		log("getSmoothedColorArray returning new color palette.", VERBOSE)
+		log(" " + colorsPalette.toList, VERBOSE)
+
+		return colorsPalette.toList
+	}
+
 }
 
 class ColorsList(var colors: List[ColorItem]) extends MyLoggable {
 	
-	def findColor(iterations: Int, zReal: Int, zComp: Int): Int = {		
+	def findColor(iterations: Int, x:Double, y:Double, x_0:Double, y_0:Double): Int = {		
 	  for (colorItem: ColorItem <- colors) {
 	  	if (colorItem.isInRange(iterations))
-	  		return colorItem.getColor(iterations) 
+	  		return colorItem.getColor(iterations, x, y, x_0, y_0) 
 	  }
 	  //If it arrives here something went wrong
 	  log("Did not find a color set for the iterations number: " + iterations, SEVERE)
@@ -91,4 +125,5 @@ class ColorsList(var colors: List[ColorItem]) extends MyLoggable {
 
 	  0
 	}
+	
 }
