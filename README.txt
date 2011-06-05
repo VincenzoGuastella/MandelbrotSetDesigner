@@ -31,8 +31,12 @@ Version 0.1 (first commit)
 Colors, window size and threads can be configured through the startup configuration file
 Colors can be configured through the dedicated dialog in the GUI
 
-Known issues:
+Version 0.1.1 
 
-- repaint of the main window not working properly
-- the color configuration dialog opens twice
+Moved pixels calculations out of repaint method, added swing event to trigger 
+method call and complete repaint
 
+Versio 0.1.2
+
+Added smoothed colors. Now the user can choose trouhg the GUI every possible color
+or color smoothing to be applied to the diagram.
