@@ -38,5 +38,5 @@ method call and complete repaint
 
 Versio 0.1.2
 
-Added smoothed colors. Now the user can choose trouhg the GUI every possible color
+Added smoothed colors. Now the user can choose through the GUI every possible color
 or color smoothing to be applied to the diagram.
