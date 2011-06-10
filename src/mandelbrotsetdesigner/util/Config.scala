@@ -79,10 +79,8 @@ object Config {
 
 	
 	def setCenter (x: Double, y: Double) {
-		println("setCenter x [" + x + "]     y [" + y + "]")
 		START_X = START_X + ((x - WIDTH / 2) * INCREMENT)
 		START_Y = START_Y + ((y - HEIGHT / 2) * INCREMENT)		
-		println("New x [" + START_X + "]    New y [" + START_Y + "]")
 	}
 	
 }

@@ -88,13 +88,11 @@ object ColorsList extends MyLoggable {
 												new ChannelValues(from.getGreen, to.getGreen, 0, 0),
 												new ChannelValues(from.getBlue, to.getBlue, 0, 0))
 	  
-		log("Initialized color palette.", VERBOSE)
+		log("getSmoothedColorArray Channels values: " + channels.toList, VERBOSE)
+
 		log(" " + colorsPalette.toList, VERBOSE)
 		
-		log("Channels: " + channels.toList, VERBOSE)
-
 		for (i <- 1 until 254) {
-			println("i: " + i)
 	  	if (channels.exists{_.nextStep == i}) {
 	  		colorsPalette += new Color(channels(0).getNewChanneValue(i), 
 	  															 channels(1).getNewChanneValue(i),
