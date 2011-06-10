@@ -21,7 +21,7 @@ object ColorsList extends MyLoggable {
 				              SharpColorItem(0x191970, 7, 8), //midnightblue
 											SharpColorItem(0xee0000, 9, 16), //Red
 			                SharpColorItem(Color.YELLOW.getRGB, 17, 38), 
-			                SharpColorItem(Color.WHITE.getRGB, 39, 499),
+			                SharpColorItem(Color.WHITE.getRGB, 39, 999),
 			                MdbsColorItem(Color.BLACK.getRGB)) 
 
 		new ColorsList(colors)

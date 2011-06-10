@@ -9,7 +9,7 @@
        threads in the pixel calculating function -->	         
 	<System maxThreads="24" 
 	        linesPerThread="20" 
-	        maxIterations="500"></System>
+	        maxIterations="1000"></System>
 
 	<DefaultDiagram width="1400" 
 	                height="1024" 

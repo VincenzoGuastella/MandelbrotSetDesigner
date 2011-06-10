@@ -15,6 +15,8 @@ trait MyLoggable {
   }
 
 	def log(message: String, level: Level) {
+		if (MyLoggable isLoggingOff) return
+		
 		if (MyLoggable isLoggingInitialized) {
 			var classname = Utils.substringBefore(this.getClass().getName(), "$")
 			MyLoggable.logger.logp(level, classname, " ", message)
@@ -47,6 +49,7 @@ trait MyLoggable {
 object  MyLoggable {
 	
 	var isLoggingInitialized = false
+	var isLoggingOff = false
 	var traceOnConsole = false
   var logger:java.util.logging.Logger = null
   var fh: FileHandler = null
@@ -79,6 +82,7 @@ object  MyLoggable {
       }
 
       isLoggingInitialized = true
+      if (MyLoggable.logger.getLevel.equals(Level.OFF)) isLoggingOff = true
       
     } catch {
       case ex: IOException => {

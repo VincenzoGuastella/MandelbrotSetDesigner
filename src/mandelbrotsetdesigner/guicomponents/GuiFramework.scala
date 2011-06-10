@@ -1,11 +1,14 @@
 package mandelbrotsetdesigner.guicomponents
 
 import mandelbrotsetdesigner.util.MyLoggable
-
 import scala.swing.Component
+import scala.swing.Frame
+import mandelbrotsetdesigner.util.Config
 
 trait GuiFramework extends MyLoggable{
 	
+	var mainFrame : Frame = null
+	var repaintAll = true
 
 	def tryCatch(comp: Component)(wrappedMethod: => Unit) {
 		try {
@@ -36,6 +39,27 @@ trait GuiFramework extends MyLoggable{
 			}
 		}
 		
+	}
+	
+	/**
+	 * 
+	 * @param zoomRate
+	 * 
+	 */
+	def zoom(zoomRate: Double) {
+		val xSize:Double = Config.INCREMENT * Config.WIDTH
+		val ySize:Double = Config.INCREMENT * Config.HEIGHT
+		
+		Config.INCREMENT = Config.INCREMENT * zoomRate
+
+		val xShift:Double = (xSize - Config.INCREMENT * Config.WIDTH) / 2
+		val yShift:Double = (ySize - Config.INCREMENT * Config.HEIGHT) / 2
+
+		Config.START_X = Config.START_X + xShift
+		Config.START_Y = Config.START_Y + yShift
+
+		repaintAll = true 
+  	mainFrame.repaint 		
 	}
 
 }

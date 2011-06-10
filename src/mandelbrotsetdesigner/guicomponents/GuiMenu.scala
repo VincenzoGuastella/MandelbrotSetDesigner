@@ -4,11 +4,9 @@ import swing._
 import scala.swing.event.Event
 import scala.swing.event.WindowClosing
 import scala.swing.event.WindowClosed
+import mandelbrotsetdesigner.util.Config
 
-trait GuiMenu extends GuiFramework with Reactor {
-	
-	var mainFrame : Frame = null
-	var repaintAll = true
+trait GuiMenu extends GuiFramework with Reactor with Config {
 	
 	def addGuiMenu(contents: Seq[scala.swing.Component]): MenuBar = {
 		

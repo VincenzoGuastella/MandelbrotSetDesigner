@@ -34,13 +34,18 @@ case class SharpColorItem(color: Int, var startRange: Int, var endRange: Int) ex
 
 
 /*
- * TO DO
+ * 
  */
 case class SmoothedColorItem(val fromColor: Color, val toColor: Color, 
 														 var startRange: Int, var endRange: Int) 
 	extends ColorItem with Config with MyLoggable {
 
 	val colorsPalette: List[Color] = ColorsList.getSmoothedColorArray(fromColor, toColor)
+	
+	val iterIncrement: Double = colorsPalette.size.toDouble / 50
+	val smoothingFactor: Double = colorsPalette.size.toDouble / 300
+	val paletteSizeMinus1: Int = colorsPalette.size - 1
+	
 	
   override def getColorValue: Int = fromColor.getRGB
   override def getGradientValue: Int = toColor.getRGB
@@ -49,11 +54,11 @@ case class SmoothedColorItem(val fromColor: Color, val toColor: Color,
 		
 		val z = FunctionIterator.getZEscape(x, y, x_0, y_0, 0) //Calculates Z for 2 more iterations
 
-		var ni: Double = iterations.toDouble + colorsPalette.size / 50 - Math.log(Math.log(z.abs)) / Math.log(ESCAPE_RADIUS)
-		ni = ni + ni * 0.2f
+		var ni: Double = iterations.toDouble + iterIncrement - Math.log(Math.log(z.abs)) / Math.log(ESCAPE_RADIUS)
+//		ni = ni + ni * 0.2f
 
-		var index = (ni * colorsPalette.size.toDouble / 100).toInt 
-  	if (index >= colorsPalette.size) index = colorsPalette.size -1
+		var index = (ni * smoothingFactor).toInt 
+  	if (index > paletteSizeMinus1) index = paletteSizeMinus1
 		if (index < 0) index = 0
 			
 		return colorsPalette(index).getRGB

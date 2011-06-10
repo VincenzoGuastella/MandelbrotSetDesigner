@@ -15,7 +15,7 @@
     <!-- YELLOW -->
     <ColorItem itemType="sharp" colorRGB="ffff00" startRange="17" endRange="38"></ColorItem>
     <!-- WHITE -->
-    <ColorItem itemType="sharp" colorRGB="ffffff" startRange="39" endRange="499"></ColorItem>
+    <ColorItem itemType="sharp" colorRGB="ffffff" startRange="39" endRange="999"></ColorItem>
     <!-- BLACK -->
     <ColorItem itemType="mdbs" colorRGB="000000"></ColorItem>
 	</ColorItems>

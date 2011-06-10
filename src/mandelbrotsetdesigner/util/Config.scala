@@ -56,6 +56,7 @@ trait Config extends MyLoggable {
 	def INCREMENT: Double = Config.INCREMENT
 
 	def ESCAPE_RADIUS: Double = Config.ESCAPE_RADIUS
+
 }
 
 object Config {
@@ -76,4 +77,12 @@ object Config {
 	
 	val ESCAPE_RADIUS: Double = 2.0
 
+	
+	def setCenter (x: Double, y: Double) {
+		println("setCenter x [" + x + "]     y [" + y + "]")
+		START_X = START_X + ((x - WIDTH / 2) * INCREMENT)
+		START_Y = START_Y + ((y - HEIGHT / 2) * INCREMENT)		
+		println("New x [" + START_X + "]    New y [" + START_Y + "]")
+	}
+	
 }

@@ -36,7 +36,13 @@ Version 0.1.1
 Moved pixels calculations out of repaint method, added swing event to trigger 
 method call and complete repaint
 
-Versio 0.1.2
+Version 0.1.2
 
 Added smoothed colors. Now the user can choose through the GUI every possible color
 or color smoothing to be applied to the diagram.
+
+Version 0.1.3
+
+Added right click popup menu with "Center Here" and zooming at different levels.
+Various performance improvements and added PixelsCalculation for better thread management.
+
