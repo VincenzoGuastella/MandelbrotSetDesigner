@@ -57,9 +57,8 @@ object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework
        	if (repaintAll)
        		tryCatch(this) { calculatePixels(img) } 
        	
-       	g.drawImage(img, null, 0, 0)        
+       	g.drawImage(img, null, 0, 0)   
       }
-
     }
 	}
 	
@@ -110,8 +109,8 @@ object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework
 
 		while (threadsStatusFlag == 0) {
 			Thread.sleep(waitTime)
-		}	 		
-		log("pixels Calculation Completed", VERBOSE)
+		}	
+		threadsStatusFlag = 0 //Reset the value for the next paint
 	}
 	
 	def waitForDrawCompleted(imgDrawer: ImageDrawer) {
