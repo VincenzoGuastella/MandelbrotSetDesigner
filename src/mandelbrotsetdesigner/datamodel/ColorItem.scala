@@ -45,17 +45,16 @@ case class SmoothedColorItem(val fromColor: Color, val toColor: Color,
 	val iterIncrement: Double = colorsPalette.size.toDouble / 50
 	val smoothingFactor: Double = colorsPalette.size.toDouble / 300
 	val paletteSizeMinus1: Int = colorsPalette.size - 1
-	
+	val lnEscapeRadius: Double = Math.log(ESCAPE_RADIUS)
 	
   override def getColorValue: Int = fromColor.getRGB
   override def getGradientValue: Int = toColor.getRGB
 	
 	override def getColor(iterations: Int, x:Double, y:Double, x_0:Double, y_0:Double): Int = {
 		
-		val z = FunctionIterator.getZEscape(x, y, x_0, y_0, 0) //Calculates Z for 2 more iterations
+		val z = FunctionIterator.getZEscape(x, y, x_0, y_0, 0) //Calculates Z for 3 more iterations
 
-		var ni: Double = iterations.toDouble + iterIncrement - Math.log(Math.log(z.abs)) / Math.log(ESCAPE_RADIUS)
-//		ni = ni + ni * 0.2f
+		var ni: Double = iterations.toDouble + iterIncrement - Math.log(Math.log(z.abs)) / lnEscapeRadius
 
 		var index = (ni * smoothingFactor).toInt 
   	if (index > paletteSizeMinus1) index = paletteSizeMinus1

@@ -11,12 +11,7 @@ import scala.collection.mutable.ListBuffer
 class PixelsCalculation(imgDrawer: ImageDrawer) 
 	extends Actor with MyLoggable with Config {
 
-	var status_ = "Starting"
-		
-	def status = status_
-	
 	def act() {
-		status_ = "Started"
 		log("PixelsCalculation thread running", FINE)  
 		
 	  var functionIterators = new ListBuffer[FunctionIterator]
@@ -31,7 +26,7 @@ class PixelsCalculation(imgDrawer: ImageDrawer)
 	  }
 		
 	  waitForAllThreadsCompleted(functionIterators)
-		status_ = "Completed"	  
+	  MandelbrotSetDesigner.threadsStatusFlag = 1
 		log("PixelsCalculation thread Completed", VERBOSE)  
 
 		exit()

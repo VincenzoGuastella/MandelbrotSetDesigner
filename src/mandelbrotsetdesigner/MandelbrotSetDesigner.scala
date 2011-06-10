@@ -23,6 +23,9 @@ import javax.swing.JPopupMenu
 object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework 
 														 with Config with GuiMenu with PopUpMenu {
 	
+	var threadsStatusFlag = 0;
+	var waitTime = MAX_ITERATIONS / 4
+	
 	override def startup(args: Array[String]) {
 		var configFilName = parseInputArgs(args)
 		if (configFilName.equals("printUsage")) printUsage
@@ -105,17 +108,15 @@ object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework
 	def waitCalculationCompleted(pixelsCalculation: PixelsCalculation) {
 		log("Wait for Calculation to be Completed", VERBOSE)
 
-		while (!pixelsCalculation.status.equals("Completed")) {
-			Thread.sleep(1000)
-		}	 
-		
+		while (threadsStatusFlag == 0) {
+			Thread.sleep(waitTime)
+		}	 		
 		log("pixels Calculation Completed", VERBOSE)
-
 	}
 	
 	def waitForDrawCompleted(imgDrawer: ImageDrawer) {
 		while(imgDrawer.mboxSize > 0){			
-			Thread.sleep(2000)
+			Thread.sleep(waitTime)
 		}
 	  log("Stopping imgDrawer", VERBOSE)
 		imgDrawer ! Stop

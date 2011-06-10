@@ -26,8 +26,8 @@ class FunctionIterator(p_y0: Int, p_y1: Int, imageDrawer: ImageDrawer,
 				status = "Started"
 					
 		  	for(p_x <- 0 until width; p_y <- p_y0 to p_y1) {
-		  		val x = startX + (increment * p_x)
-			  	val y = startY + (increment * p_y)
+		  		val x: Double = startX + (increment * p_x)
+			  	val y: Double = startY + (increment * p_y)
 			  	
 				  val (it: Int, newX: Double, newY: Double) = getIterations(0, 0, x, y, 0)
 //		      log("getIterations completed:" + it, FINEST)  
