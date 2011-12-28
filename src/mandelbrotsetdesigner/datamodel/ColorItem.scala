@@ -14,7 +14,7 @@ trait ColorItem  {
 	
 	
 	def isInRange(iterations: Int): Boolean = {
-	  return (iterations >= startRange && iterations <= endRange)
+	  (iterations >= this.startRange && iterations <= this.endRange)
 	}
 	
 	def getColor(iterations: Int, x: Double, y: Double, x_0: Double, y_0: Double): Int
@@ -45,7 +45,7 @@ case class SmoothedColorItem(val fromColor: Color, val toColor: Color,
 	val iterIncrement: Double = colorsPalette.size.toDouble / 50
 	val smoothingFactor: Double = colorsPalette.size.toDouble / 300
 	val paletteSizeMinus1: Int = colorsPalette.size - 1
-	val lnEscapeRadius: Double = Math.log(ESCAPE_RADIUS)
+	val lnEscapeRadius: Double = scala.math.log(ESCAPE_RADIUS)
 	
   override def getColorValue: Int = fromColor.getRGB
   override def getGradientValue: Int = toColor.getRGB
@@ -54,7 +54,8 @@ case class SmoothedColorItem(val fromColor: Color, val toColor: Color,
 		
 		val z = FunctionIterator.getZEscape(x, y, x_0, y_0, 0) //Calculates Z for 3 more iterations
 
-		var ni: Double = iterations.toDouble + iterIncrement - Math.log(Math.log(z.abs)) / lnEscapeRadius
+		var ni: Double = iterations.toDouble + iterIncrement - 
+										scala.math.log(scala.math.log(z.abs)) / lnEscapeRadius
 
 		var index = (ni * smoothingFactor).toInt 
   	if (index > paletteSizeMinus1) index = paletteSizeMinus1

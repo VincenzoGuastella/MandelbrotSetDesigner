@@ -114,16 +114,16 @@ class BaseColorPanel(parent: ColorDialog, from: Int, to: Int,
  	
 	def setSharp {
 		isSharp = true
-		picker2.disable //Wanted to write: disable picker2 (how to declare method?)
-		lGrad.enabled = false
+		picker2.disable 
+		lGrad enabled = false
 		
 		parent repaint
 	}
 
 	def setSmoothed {
 		isSharp = false
-		picker2.enable //Wanted to write: enable picker2 (how to declare method?)
-		lGrad.enabled = true
+		picker2.enable
+		lGrad enabled = true
 
 		parent repaint
 	}

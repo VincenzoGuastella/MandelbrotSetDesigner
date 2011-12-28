@@ -8,12 +8,12 @@ import java.awt.{Toolkit, Color, Graphics}
 
 object SingleThreadedMandelbrotSetDesigner extends SimpleSwingApplication {
 
-	val WIDTH = 1400
-	val HEIGHT = 1024
-	val START_X = -2.3 
-	val START_y = -1.3
-	val INCREMENT = 0.0026
-	val MAX_ITERATIONS = 500
+	val WIDTH = 1366
+	val HEIGHT = 708
+	val START_X = -2.6 
+	val START_y = -1.2
+	val INCREMENT = 0.0035
+	val MAX_ITERATIONS = 2000
 	val colors = List(ColorMatcher(0x060620, 0, 1), //darkblue
 			              ColorMatcher(0x060630, 2, 3), //darkblue
 			              ColorMatcher(0x060640, 4, 6), //Navy 
@@ -38,7 +38,7 @@ object SingleThreadedMandelbrotSetDesigner extends SimpleSwingApplication {
        	println("Calling drawImage")
         drawImage(img)
         timeCheck = System.currentTimeMillis() - timeCheck
-       	println("drawImage completed")
+       	println("drawImage completed. Time taken: " + timeCheck)
         g.drawImage(img, null, 0, 0)        
         Toolkit.getDefaultToolkit().sync
 //        g.dispose 
@@ -65,8 +65,8 @@ object SingleThreadedMandelbrotSetDesigner extends SimpleSwingApplication {
 	}
 	
 	
-	def getIterations(x:Double, 	y:Double, 
-										x_0:Double, y_0:Double, iterations: Int):Int = {
+	private def getIterations(x:Double, 	y:Double, 
+														x_0:Double, y_0:Double, iterations: Int):Int = {
 	  val newX = x*x - y*y + x_0
 	  val newY = 2*x*y + y_0
 	  if (iterations < MAX_ITERATIONS && newX*newX + newY*newY <= 4)

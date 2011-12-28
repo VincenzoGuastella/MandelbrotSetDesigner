@@ -71,8 +71,6 @@ class ColorDialog(owner: Window) extends Dialog(owner) with GuiFramework with Co
 		})
   }
 
-	//Keep these at the bottom
-	//As soon as visible is true it starts repainting
 	log ("About to set visible", VERBOSE)
 	pack
 	visible = true

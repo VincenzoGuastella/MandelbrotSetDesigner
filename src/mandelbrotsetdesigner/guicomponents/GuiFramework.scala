@@ -47,16 +47,13 @@ trait GuiFramework extends MyLoggable{
 	 * 
 	 */
 	def zoom(zoomRate: Double) {
-		val xSize:Double = Config.INCREMENT * Config.WIDTH
-		val ySize:Double = Config.INCREMENT * Config.HEIGHT
+	  val xCenter:Double = Config.START_X + Config.WIDTH / 2 * Config.INCREMENT
+	  val yCenter:Double = Config.START_Y + Config.HEIGHT / 2 * Config.INCREMENT
 		
 		Config.INCREMENT = Config.INCREMENT * zoomRate
 
-		val xShift:Double = (xSize - Config.INCREMENT * Config.WIDTH) / 2
-		val yShift:Double = (ySize - Config.INCREMENT * Config.HEIGHT) / 2
-
-		Config.START_X = Config.START_X + xShift
-		Config.START_Y = Config.START_Y + yShift
+		Config.START_X = xCenter - Config.WIDTH / 2 * Config.INCREMENT
+		Config.START_Y = yCenter - Config.HEIGHT / 2 * Config.INCREMENT
 
 		repaintAll = true 
   	mainFrame.repaint 		

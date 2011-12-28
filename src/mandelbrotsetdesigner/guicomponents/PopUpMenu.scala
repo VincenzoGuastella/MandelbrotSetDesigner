@@ -57,7 +57,7 @@ trait PopUpMenu extends GuiFramework {
 	}
 	
   def changeImageCenter(menu: JPopupMenu) {
-  	Config.setCenter(x, y)
+  	Config.setCenter(x - 4, y - 50)
   	menu.setVisible(false)
   	repaintAll = true 
   	mainFrame.repaint 

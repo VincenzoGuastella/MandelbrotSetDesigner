@@ -28,6 +28,10 @@ trait MyLoggable {
 		!MyLoggable.logger.getLevel.equals(Level.OFF)
 	}
 
+	def isLogFine : Boolean = {
+		MyLoggable.logger.getLevel.intValue >= Level.FINE.intValue
+	}
+
 	
 	def SEVERE: Level = Level.SEVERE
 
@@ -89,12 +93,12 @@ object  MyLoggable {
       	println ("Caught exception initializing the log file: ")
       	println (ex.getClass)
       	println (ex.getMessage)
-        exit(0)
+        sys.exit(0)
       }
 	    case ex: Exception => {
       	println ("Caught exception initializing the logging")
         ex.printStackTrace();
-        exit(0)
+        sys.exit(0)
 	    }
     }
   }
@@ -105,8 +109,6 @@ class MyLevel(levelName: String, levelValue: Int)
 	extends Level(levelName, levelValue) {
 }
 
-//Couldn't solve compiler error
-//object MyLevel extends Level {
 
 object MyLevel {
   // Create new logging levels

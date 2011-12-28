@@ -14,7 +14,7 @@ trait GuiMenu extends GuiFramework with Reactor with Config {
       contents += new Menu("File") {
         contents += new MenuItem(Action("Save Current Graph") { isNotImplemented(this) })
         contents += new Separator
-        contents += new MenuItem(Action("Exit") { exit() })  
+        contents += new MenuItem(Action("Exit") { sys.exit() })  
       }
       contents += new Menu("Graph") {
         contents += new MenuItem(Action("Show coordinates") { isNotImplemented(this) })
@@ -23,7 +23,7 @@ trait GuiMenu extends GuiFramework with Reactor with Config {
       }
     }
 
-		return menuBar
+		menuBar
 	}
 
 	
@@ -44,10 +44,10 @@ trait GuiMenu extends GuiFramework with Reactor with Config {
 		  	mainFrame repaint 
 		  } 
 		  // Is it necessary ?
-		  case WindowClosing(colorDialog) => {
-		  	log("Reactions: caught WindowClosing event", INFO)
-		    deafTo(colorDialog)
-		  }
+//		  case WindowClosing(colorDialog) => {
+//		  	log("Reactions: caught WindowClosing event", INFO)
+//		    deafTo(colorDialog)
+//		  }
 //		  case e : Event => {
 //		  	log("Case else selected", VERBOSE)
 //		  	log(" " + e, INFO)

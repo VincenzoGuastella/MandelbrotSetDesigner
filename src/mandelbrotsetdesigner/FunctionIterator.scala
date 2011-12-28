@@ -1,5 +1,6 @@
 package mandelbrotsetdesigner
 
+import mandelbrotsetdesigner.datamodel._
 import mandelbrotsetdesigner.util.Config
 import mandelbrotsetdesigner.util.MyLoggable
 import scala.actors.Actor._
@@ -8,7 +9,6 @@ import scala.actors.Actor
 class FunctionIterator(p_y0: Int, p_y1: Int, imageDrawer: ImageDrawer, 
 											 caller: Actor) extends MyLoggable with Config { 
 	
-	var status = "Initial"
 	val maxIterations = MAX_ITERATIONS
 	val increment = INCREMENT
 	val startX = START_X
@@ -23,13 +23,12 @@ class FunctionIterator(p_y0: Int, p_y1: Int, imageDrawer: ImageDrawer,
 
 			try {				
 //				log("Starting functionIterator thread. Range: y0[" + p_y0 + "]" + " y1[" + p_y1 + "]", FINER)  
-				status = "Started"
 					
 		  	for(p_x <- 0 until width; p_y <- p_y0 to p_y1) {
 		  		val x: Double = startX + (increment * p_x.toDouble)
 			  	val y: Double = startY + (increment * p_y.toDouble)
 			  	
-				  val (it: Int, newX: Double, newY: Double) = getIterations(0, 0, x, y, 0)
+				  val (it: Int, newX: Double, newY: Double) = getIterations(0.0, 0.0, x, y, 0)
 //		      log("getIterations completed:" + it, FINEST)  
 				  
 					val rgb = colors.findColor(it, newX, newY, x, y)		  	
@@ -38,7 +37,6 @@ class FunctionIterator(p_y0: Int, p_y1: Int, imageDrawer: ImageDrawer,
 				  imageDrawer ! (new PixelColor(p_x, p_y, rgb))
 		  	}
 				caller ! new FICompleted(this)
-				status = "Completed"
 				exit()
 			} catch {
 					case e: Exception => {
@@ -46,20 +44,13 @@ class FunctionIterator(p_y0: Int, p_y1: Int, imageDrawer: ImageDrawer,
 					log(e.toString, SEVERE)
 					log(" " + e.getStackTrace, SEVERE)
 					//Better leave the rest of the pixels blank in these lines and go on
-					status = "Completed"
 					exit()
 				}
 			} 
-      /* TO DO find out why the compiler want the return values
-       * to be set in every block instead of accepting finally
-			finally {	
-				status = "Completed"
-				exit()
-			} */ 
 		}
   }
 
-  def getIterations(x:Double, 	y:Double, 
+  private def getIterations(x:Double, 	y:Double, 
 										x_0:Double, y_0:Double, iterations: Int):(Int, Double, Double) = {
 	  val newX = x*x - y*y + x_0
 	  val newY = x*y*2.0 + y_0
@@ -86,7 +77,7 @@ object FunctionIterator {
 	  val newX = x*x - y*y + x_0
 	  val newY = x*y*2.0 + y_0
 	  if (counter > 2) getZEscape(newX, newY, x_0, y_0, counter + 1)
-		else Math.sqrt(newX*newX + newY*newY)
+		else scala.math.sqrt(newX*newX + newY*newY)
 	}
 
 }

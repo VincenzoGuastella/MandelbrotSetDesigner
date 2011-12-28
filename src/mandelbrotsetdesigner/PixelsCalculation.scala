@@ -50,11 +50,12 @@ class PixelsCalculation(imgDrawer: ImageDrawer)
 	 * This method throttles the calculation threads.
 	 * No more than MAX_THREADS are running concurrently.           
 	 */
-	def createIterationThread(p_y0: Int, p_y1: Int, imgDrawer: ImageDrawer, 
+	private def createIterationThread(p_y0: Int, p_y1: Int, imgDrawer: ImageDrawer, 
 														functionIterators: ListBuffer[FunctionIterator]){
 		
   	if (functionIterators.length < MAX_THREADS) {
-  		log("Creating new actor. Range: y0[" + p_y0 + "]" + " y1[" + p_y1 + "]", FINE)
+  		if (isLogFine) //Int to string has a performance impact here
+  			log("Creating new actor. Range: y0[" + p_y0 + "]" + " y1[" + p_y1 + "]", FINE)
   		var f = new FunctionIterator(p_y0, p_y1, imgDrawer, this)
   		functionIterators.append(f)
   	}	else {
@@ -68,7 +69,7 @@ class PixelsCalculation(imgDrawer: ImageDrawer)
 	}
 
 	
-	def waitForAllThreadsCompleted(functionIterators: ListBuffer[FunctionIterator]) {
+	private def waitForAllThreadsCompleted(functionIterators: ListBuffer[FunctionIterator]) {
 		while (functionIterators.length > 0) {
 			receive {
 			  case fiCompleted: FICompleted => {

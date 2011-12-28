@@ -59,7 +59,7 @@ object ColorsList extends MyLoggable {
 		
 		if ( colors.count(item => item.isInstanceOf[MdbsColorItem]) > 1 ) {
 			log("Default Color scheme invalid. One and only one color of type mdbs must be defined", SEVERE)
-			return false
+			false
 		}
 		
 		var param = -1
@@ -67,7 +67,7 @@ object ColorsList extends MyLoggable {
 			if (item.startRange == param + 1) param = item.endRange
 			else if (!item.isInstanceOf[MdbsColorItem]){
 				log("Default Color scheme invalid. Start and end ranges of the colors contain a gap or an overlap", SEVERE)
-				return false 
+				false 
 			}
 		})
 
@@ -105,7 +105,7 @@ object ColorsList extends MyLoggable {
 		log("getSmoothedColorArray returning new color palette.", VERBOSE)
 		log(" " + colorsPalette.toList, VERBOSE)
 
-		return colorsPalette.toList
+		colorsPalette.toList
 	}
 
 }
@@ -123,5 +123,5 @@ class ColorsList(var colors: List[ColorItem]) extends MyLoggable {
 
 	  0
 	}
-	
+		
 }

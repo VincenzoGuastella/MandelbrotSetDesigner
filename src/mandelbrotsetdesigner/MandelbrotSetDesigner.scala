@@ -24,7 +24,7 @@ object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework
 														 with Config with GuiMenu with PopUpMenu {
 	
 	var threadsStatusFlag = 0;
-	var waitTime = MAX_ITERATIONS / 4
+	var waitTime:Int = MAX_ITERATIONS / 5
 	
 	override def startup(args: Array[String]) {
 		var configFilName = parseInputArgs(args)
@@ -93,7 +93,6 @@ object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework
    		pixelsCalculation.start()
 	    log("Threads Started", VERBOSE)	
 	
-	    return imgDrawer			
 		} catch {
 			case e: Exception => {
 				log("Caught exception starting the Drawing Threads", SEVERE)
@@ -144,8 +143,7 @@ object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework
     println("--properties|-p followed by a properties file, specifies the XML file containing the configuration");    
     println("-h (optional) Prints this help output then exits");    
  
-//    exit(0); Here the compiler went mad. Now I have to use the following
-    exit(0.asInstanceOf[AnyRef]);
+    exit();
   }
 	
 }

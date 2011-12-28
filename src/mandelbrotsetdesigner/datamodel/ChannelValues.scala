@@ -19,8 +19,9 @@ class ChannelValues(var value: Int, val valueTo: Int,
 				nextStep += step
 			}
 		}
-		return value
+		value
 	}
 	
-	override def toString: String =  "Value [" + value + "] Delta [" + delta  + "] Step [" + step + "] Nextstep [" + nextStep 
+	override def toString: String = "Value [" + value + "] Delta [" + delta +
+																	"] Step [" + step + "] Nextstep [" + nextStep
 }
