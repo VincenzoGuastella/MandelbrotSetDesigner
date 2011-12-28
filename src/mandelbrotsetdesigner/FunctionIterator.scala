@@ -50,8 +50,8 @@ class FunctionIterator(p_y0: Int, p_y1: Int, imageDrawer: ImageDrawer,
 		}
   }
 
-  private def getIterations(x:Double, 	y:Double, 
-										x_0:Double, y_0:Double, iterations: Int):(Int, Double, Double) = {
+  private def getIterations(x:Double, y:Double, x_0:Double, 
+														y_0:Double, iterations: Int):(Int, Double, Double) = {
 	  val newX = x*x - y*y + x_0
 	  val newY = x*y*2.0 + y_0
 	  if (iterations < maxIterations && newX*newX + newY*newY <= 4)

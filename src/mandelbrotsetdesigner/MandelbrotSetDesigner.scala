@@ -23,9 +23,7 @@ import java.util.concurrent.CountDownLatch;
 
 object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework 
 														 with Config with GuiMenu with PopUpMenu {
-	
-	var waitTime:Int = MAX_ITERATIONS / 5
-	
+		
 	override def startup(args: Array[String]) {
 		var configFilName = parseInputArgs(args)
 		if (configFilName.equals("printUsage")) printUsage

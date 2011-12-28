@@ -15,7 +15,7 @@ class PixelsCalculation(imgDrawer: ImageDrawer, latch:CountDownLatch)
 	extends Actor with MyLoggable with Config {
 
 	def act {
-	  var functionIterators = new ListBuffer[FunctionIterator]
+	  val functionIterators = new ListBuffer[FunctionIterator]
 		
 		var p_y , p_y0 = 0;
 	  while(p_y < HEIGHT) {
