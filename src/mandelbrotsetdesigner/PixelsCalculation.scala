@@ -1,19 +1,20 @@
 package mandelbrotsetdesigner
 
 import mandelbrotsetdesigner.util._
+
 import scala.actors.Actor
 import scala.actors.Actor._
 import scala.collection.mutable.LinkedList
-import java.awt.image.BufferedImage
-import java.awt.{Toolkit, Color, Graphics}
 import scala.collection.mutable.ListBuffer
 
-class PixelsCalculation(imgDrawer: ImageDrawer) 
+import java.awt.image.BufferedImage
+import java.awt.{Toolkit, Color, Graphics}
+import java.util.concurrent.CountDownLatch
+
+class PixelsCalculation(imgDrawer: ImageDrawer, latch:CountDownLatch) 
 	extends Actor with MyLoggable with Config {
 
-	def act() {
-		log("PixelsCalculation thread running", FINE)  
-		
+	def act {
 	  var functionIterators = new ListBuffer[FunctionIterator]
 		
 		var p_y , p_y0 = 0;
@@ -26,13 +27,15 @@ class PixelsCalculation(imgDrawer: ImageDrawer)
 	  }
 		
 	  waitForAllThreadsCompleted(functionIterators)
-	  MandelbrotSetDesigner.threadsStatusFlag = 1
+		imgDrawer ! Stop
+	  
+	  latch.countDown()
+	  
 		log("PixelsCalculation thread Completed", VERBOSE)  
 
 		exit()
 	}
-
-		
+	
 	/**
 	 * createIterationThread() creates a pixel calculation threads
 	 * and adds it to the active threads list
@@ -70,13 +73,14 @@ class PixelsCalculation(imgDrawer: ImageDrawer)
 
 	
 	private def waitForAllThreadsCompleted(functionIterators: ListBuffer[FunctionIterator]) {
+		
 		while (functionIterators.length > 0) {
 			receive {
 			  case fiCompleted: FICompleted => {
 			  	functionIterators.remove(functionIterators.indexOf(fiCompleted.fi))
 			  }
 			}
-		}	  			
+		}		
 	}
-
+	
 }

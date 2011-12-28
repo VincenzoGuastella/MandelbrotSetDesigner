@@ -18,12 +18,12 @@ import scala.collection.mutable.ListBuffer
 import java.awt.image.BufferedImage
 import java.awt.{Toolkit, Color, Graphics}
 import javax.swing.JPopupMenu
+import java.util.concurrent.CountDownLatch;
 
 
 object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework 
 														 with Config with GuiMenu with PopUpMenu {
 	
-	var threadsStatusFlag = 0;
 	var waitTime:Int = MAX_ITERATIONS / 5
 	
 	override def startup(args: Array[String]) {
@@ -66,14 +66,15 @@ object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework
    	var timeCheck = System.currentTimeMillis()
    	log("Calling drawImage", INFO)
 		
-    val imgDrawer = new ImageDrawer(img)   	    
-    var pixelsCalculation = new PixelsCalculation(imgDrawer: ImageDrawer)
+   	val latch = new CountDownLatch(2)
+   	
+    val imgDrawer = new ImageDrawer(img,latch) 
+    val pixelsCalculation = new PixelsCalculation(imgDrawer: ImageDrawer, latch)
 
    	startDrawingThreads(imgDrawer, pixelsCalculation)
-		  
-		waitCalculationCompleted(pixelsCalculation)
-    waitForDrawCompleted(imgDrawer)
-
+		
+		latch.await() // Waiting for the pixelsCalculation thread to complete
+		
     timeCheck = System.currentTimeMillis() - timeCheck
    	log("drawImage completed. Time taken: " + timeCheck, INFO)
    	
@@ -103,25 +104,7 @@ object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework
 		}
 	}
 		
-	def waitCalculationCompleted(pixelsCalculation: PixelsCalculation) {
-		log("Wait for Calculation to be Completed", VERBOSE)
-
-		while (threadsStatusFlag == 0) {
-			Thread.sleep(waitTime)
-		}	
-		threadsStatusFlag = 0 //Reset the value for the next paint
-	}
 	
-	def waitForDrawCompleted(imgDrawer: ImageDrawer) {
-		while(imgDrawer.mboxSize > 0){			
-			Thread.sleep(waitTime)
-		}
-	  log("Stopping imgDrawer", VERBOSE)
-		imgDrawer ! Stop
-	}
-	
-
-
 	def parseInputArgs(args: Array[String]):String = {
 		var returnval = "printUsage"
     
