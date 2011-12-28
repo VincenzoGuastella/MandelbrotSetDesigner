@@ -42,16 +42,7 @@ trait GuiMenu extends GuiFramework with Reactor with Config {
 		    deafTo(colorDialog)
 		  	colorDialog close;
 		  	mainFrame repaint 
-		  } 
-		  // Is it necessary ?
-//		  case WindowClosing(colorDialog) => {
-//		  	log("Reactions: caught WindowClosing event", INFO)
-//		    deafTo(colorDialog)
-//		  }
-//		  case e : Event => {
-//		  	log("Case else selected", VERBOSE)
-//		  	log(" " + e, INFO)
-//		  }		  
+		  } 	  
 		}
 	}
 
