@@ -68,9 +68,9 @@ object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework
    	var timeCheck = System.currentTimeMillis()
    	log("Calling image drawer", INFO)
    	try {
-	    val pixelsCalculation = actorOf(new PixelsCalculation(img)).start()
+	    val imageDrawer = actorOf(new ImageDrawer(img)).start()
 	    
-	  	(pixelsCalculation ? "CalcPixelsAndDraw").get
+	  	(imageDrawer ? "CalcPixelsAndDraw").get
 	  	
 	  	timeCheck = System.currentTimeMillis() - timeCheck
 	  	log("Image drawer completed. Time taken: " + timeCheck, INFO)   	

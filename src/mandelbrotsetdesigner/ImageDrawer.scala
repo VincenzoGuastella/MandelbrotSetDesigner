@@ -18,7 +18,7 @@ import java.awt.image.BufferedImage
 import java.awt.{Toolkit, Color, Graphics}
 import java.util.concurrent.CountDownLatch
 
-case class PixelsCalculation(img: BufferedImage) 
+case class ImageDrawer(img: BufferedImage) 
 	extends Actor with MyLoggable with Config {
 
 	//create the threads that execute the calculation wrap them with a load-balancing router
