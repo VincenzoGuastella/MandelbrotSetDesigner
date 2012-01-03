@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <MSDConfig>
   <!-- Trace levels: OFF, SEVERE, ERROR, WARNING, INFO, VERBOSE, FINE, FINER, ALL -->
-	<Tracing logLevel="INFO"
+	<Tracing logLevel="VERBOSE"
 	         traceOnConsole="false" 
 	         logFolder="/home/guast/temp/logs" />
 	         
   <!-- maxThreads Limits only to the number of 
        threads in the pixel calculating function -->	         
-	<System maxThreads="6" 
-	        linesPerThread="10" 
+	<System maxThreads="4" 
+	        linesPerThread="30" 
 	        maxIterations="2000"></System>
 
 	<DefaultDiagram width="1366" 

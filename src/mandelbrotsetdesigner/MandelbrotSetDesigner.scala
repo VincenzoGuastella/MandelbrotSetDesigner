@@ -8,12 +8,14 @@ import mandelbrotsetdesigner.guicomponents.GuiFramework
 import mandelbrotsetdesigner.guicomponents.ColorDialog
 import mandelbrotsetdesigner.guicomponents.RepaintAllEvent
 import swing._
+
 import scala.swing.event.Event
 
 import scala.xml._
-import scala.actors.Actor._
 import scala.collection.immutable.StringOps
 import scala.collection.mutable.ListBuffer
+
+import akka.actor.Actor._
 
 import java.awt.image.BufferedImage
 import java.awt.{Toolkit, Color, Graphics}
@@ -52,8 +54,10 @@ object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework
       override def paintComponent(g : Graphics2D) : Unit = {
        	super.paintComponent(g)
        	
-       	if (repaintAll)
+       	if (repaintAll) {
        		tryCatch(this) { calculatePixels(img) } 
+       		repaintAll = false
+       	}
        	
        	g.drawImage(img, null, 0, 0)   
       }
@@ -62,46 +66,24 @@ object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework
 	
 	def calculatePixels(img: BufferedImage) {
    	var timeCheck = System.currentTimeMillis()
-   	log("Calling drawImage", INFO)
-		
-   	val latch = new CountDownLatch(2)
-   	
-    val imgDrawer = new ImageDrawer(img,latch) 
-    val pixelsCalculation = new PixelsCalculation(imgDrawer: ImageDrawer, latch)
-
-   	startDrawingThreads(imgDrawer, pixelsCalculation)
-		
-		latch.await() // Waiting for the pixelsCalculation thread to complete
-		
-    timeCheck = System.currentTimeMillis() - timeCheck
-   	log("drawImage completed. Time taken: " + timeCheck, INFO)
-   	
-   	repaintAll = false
-	}
-		
-	/**
-	 * startDrawerThread(img: BufferedImage)
-	 * Creates the  image drawer thread. The image drawer 
-	 * thread collects the results from the calculation 
-	 * threads and sets the color of each pixel
-	 */
-	def startDrawingThreads(imgDrawer: ImageDrawer, pixelsCalculation: PixelsCalculation) {
+   	log("Calling image drawer", INFO)
    	try {
-
-   		imgDrawer.start()
-   		pixelsCalculation.start()
-	    log("Threads Started", VERBOSE)	
-	
+	    val pixelsCalculation = actorOf(new PixelsCalculation(img)).start()
+	    
+	  	(pixelsCalculation ? "CalcPixelsAndDraw").get
+	  	
+	  	timeCheck = System.currentTimeMillis() - timeCheck
+	  	log("Image drawer completed. Time taken: " + timeCheck, INFO)   	
 		} catch {
 			case e: Exception => {
-				log("Caught exception starting the Drawing Threads", SEVERE)
+				log("Image drawer failed with exception", SEVERE)
 				log(e.toString, SEVERE)
 				log(" " + e.getStackTraceString, SEVERE)
 				throw e
 			}
 		}
 	}
-		
+				
 	
 	def parseInputArgs(args: Array[String]):String = {
 		var returnval = "printUsage"
@@ -124,7 +106,7 @@ object MandelbrotSetDesigner extends SimpleSwingApplication with GuiFramework
     println("--properties|-p followed by a properties file, specifies the XML file containing the configuration");    
     println("-h (optional) Prints this help output then exits");    
  
-    exit();
+    sys.exit();
   }
 	
 }

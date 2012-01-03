@@ -7,19 +7,15 @@ MandelbrotSetDesigner is a GUI tool designed ot generate images from the Mandelb
 This is a training project focused on Scala multithreading and the scala swing libraries.
 Any comment, advice or code review sent to v.guast@mail.com will be highly appreciated.
 
-Threading model: the threads that actually calculate the function values are based on the 
-                 lightweight actor method, the master thread and the one that collects the
-                 result drawing the image are full implementations of a scala actor.
-
 *------------------------------------------------------------------------------------------*
 
 Required libraries:
 
-Scala Library 2.8.1 final
+Scala Library 2.9.1 final
  - scala-library.jar
- - scala-dbc.jar
  - scala-swing.jar
-  
+Akka 1.3 RC4
+ - akka-actor-1.3-RC4.jar 
 
 Startup arguments '-p ./Resources/MSDConfig.xml' sets the path of the configuration file
 
@@ -49,3 +45,8 @@ Version 0.2.0
 
 Some code cleanup and performance improvements. Added a java.util.concurrent.CountDownLatch
 and removed all the wait instructions.
+
+Version 0.3.0
+
+Switched to Akka actors and simplified the threading model. Removed PixelsCalculation
+class and implemented the master thread in ImageDrawer.

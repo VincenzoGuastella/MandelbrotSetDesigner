@@ -13,9 +13,8 @@ trait ColorItem  {
   var endRange: Int
 	
 	
-	def isInRange(iterations: Int): Boolean = {
+	def isInRange(iterations: Int): Boolean = 
 	  (iterations >= this.startRange && iterations <= this.endRange)
-	}
 	
 	def getColor(iterations: Int, x: Double, y: Double, x_0: Double, y_0: Double): Int
 

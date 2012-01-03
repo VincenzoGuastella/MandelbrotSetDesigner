@@ -110,18 +110,24 @@ object ColorsList extends MyLoggable {
 
 }
 
-class ColorsList(var colors: List[ColorItem]) extends MyLoggable {
+class ColorsList(val colors: List[ColorItem]) extends MyLoggable {
 	
 	def findColor(iterations: Int, x:Double, y:Double, x_0:Double, y_0:Double): Int = {		
-	  for (colorItem: ColorItem <- colors) {
-	  	if (colorItem.isInRange(iterations))
-	  		return colorItem.getColor(iterations, x, y, x_0, y_0) 
-	  }
-	  //If it arrives here something went wrong
-	  log("Did not find a color set for the iterations number: " + iterations, SEVERE)
-	  log("Colors List: " + colors.toList, SEVERE)
-
-	  0
+	  loopColorSearch(0, colors size, iterations, x, y, x_0, y_0)
+	}
+	
+	private def loopColorSearch(index:Int, maxIndex:Int, iterations:Int,
+															x:Double, y:Double, x_0:Double, y_0:Double): Int = {
+  	if (colors(index).isInRange(iterations))
+  		 colors(index).getColor(iterations, x, y, x_0, y_0) 
+		else if (index < maxIndex) 
+			 loopColorSearch(index+1, maxIndex, iterations, x, y, x_0, y_0)
+		else {
+		  //If it arrives here something went wrong
+		  log("Did not find a color set for the iterations number: " + iterations, SEVERE)
+		  log("Colors List: " + colors.toList, SEVERE)
+			0
+		}	
 	}
 		
 }

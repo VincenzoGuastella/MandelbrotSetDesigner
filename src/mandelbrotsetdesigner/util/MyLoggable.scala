@@ -29,7 +29,7 @@ trait MyLoggable {
 	}
 
 	def isLogFine : Boolean = {
-		MyLoggable.logger.getLevel.intValue >= Level.FINE.intValue
+		MyLoggable.logger.getLevel.intValue <= Level.FINE.intValue
 	}
 
 	
